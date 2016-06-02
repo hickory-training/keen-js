@@ -24,6 +24,7 @@ Keen.prototype.configure = function(cfg){
   if (config.protocol && config.protocol === 'auto') {
     config['protocol'] = location.protocol.replace(/:/g, '');
   }
+
   this.config = {
     projectId   : config.projectId,
     writeKey    : config.writeKey,
@@ -32,6 +33,7 @@ Keen.prototype.configure = function(cfg){
     requestType : config.requestType || 'jsonp',
     host        : config['host']     || 'api.keen.io/3.0',
     protocol    : config['protocol'] || 'https',
+    auth_token  : config['auth_token'],
     globalProperties: null
   };
   if (Keen.debug) {
@@ -69,7 +71,8 @@ Keen.prototype.url = function(path){
     this.trigger('error', 'Client is missing projectId property');
     return;
   }
-  return this.config.protocol + '://' + this.config.host + '/projects/' + this.projectId() + path;
+
+  return this.config.host + path + '?auth_token=' + this.config.auth_token;
 };
 
 Keen.log = function(message) {
